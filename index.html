@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101010">
+  <meta name="description" content="Senga — comedian, entertainer and singer. Comedy, music, Gospel, performances and bookings across Tanzania.">
+  <title>Senga | Comedy, Music & Entertainment</title>
+
+  <style>
+    :root {
+      --gold: #d7ad45;
+      --gold-light: #f2d58b;
+      --black: #101010;
+      --dark: #191919;
+      --panel: #222222;
+      --cream: #fff8e9;
+      --muted: #c4c0b7;
+      --green: #168653;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--cream);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    button, input, select, textarea { font: inherit; }
+
+    .container {
+      width: min(1160px, 92%);
+      margin: auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(12,12,12,.96);
+      border-bottom: 1px solid rgba(215,173,69,.35);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav {
+      min-height: 72px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand {
+      font-size: 1.45rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--gold);
+    }
+
+    .brand small {
+      display: block;
+      color: var(--cream);
+      font-size: .62rem;
+      letter-spacing: 3px;
+      font-weight: 500;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: .9rem;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .menu-button {
+      display: none;
+      color: var(--gold);
+      background: transparent;
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      padding: 7px 11px;
+      cursor: pointer;
+    }
+
+    .hero {
+      min-height: 610px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.94), rgba(0,0,0,.66) 53%, rgba(0,0,0,.35)),
+        linear-gradient(0deg, rgba(0,0,0,.75), transparent),
+        url("https://www.mwanaspoti.co.tz/resource/image/3179704/landscape_ratio2x1/320/160/802c83ecb1adf9015db3fff26d642fbe/Ab/pic-senga.jpg");
+      background-position: center;
+      background-size: cover;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+      padding: 85px 0;
+    }
+
+    .eyebrow {
+      color: var(--gold-light);
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-size: .78rem;
+    }
+
+    h1 {
+      font-size: clamp(3.1rem, 8vw, 6.7rem);
+      line-height: .98;
+      margin: 18px 0;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    h1 span { color: var(--gold); }
+
+    .hero p {
+      max-width: 610px;
+      color: #eee8dc;
+      font-size: 1.12rem;
+      margin-bottom: 27px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      border-left: 4px solid var(--gold);
+      padding: 7px 13px;
+      margin: 8px 0 24px;
+      color: var(--gold-light);
+      font-weight: 800;
+      background: rgba(0,0,0,.45);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-weight: 800;
+      border: 1px solid var(--gold);
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #151515;
+    }
+
+    .btn-primary:hover { background: var(--gold-light); }
+
+    .btn-outline {
+      color: var(--gold-light);
+      background: rgba(0,0,0,.25);
+    }
+
+    .btn-outline:hover { background: rgba(215,173,69,.15); }
+
+    section { padding: 76px 0; }
+
+    .section-heading {
+      max-width: 720px;
+      margin-bottom: 34px;
+    }
+
+    .section-heading .eyebrow { margin-bottom: 8px; }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      line-height: 1.1;
+      margin-bottom: 13px;
+    }
+
+    h2 span { color: var(--gold); }
+
+    .section-heading p, .muted { color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid #39352c;
+      border-radius: 10px;
+      padding: 25px;
+    }
+
+    .card h3 {
+      color: var(--gold-light);
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+    }
+
+    .card p { color: var(--muted); }
+
+    .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+      color: var(--gold);
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 35px;
+      align-items: center;
+    }
+
+    .about-panel {
+      border-left: 4px solid var(--gold);
+      padding: 10px 0 10px 22px;
+    }
+
+    .about-panel p { color: var(--muted); margin: 12px 0; }
+
+    .quote-band {
+      background: linear-gradient(110deg, #30240c, #17130b);
+      border-top: 1px solid #705a27;
+      border-bottom: 1px solid #705a27;
+      text-align: center;
+      padding: 48px 20px;
+    }
+
+    .quote-band h2 {
+      color: var(--gold-light);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    .quote-band p { color: var(--muted); }
+
+    .booking-layout {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    form {
+      background: var(--panel);
+      border: 1px solid #48402f;
+      border-radius: 10px;
+      padding: 25px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .field { margin-bottom: 15px; }
+
+    label {
+      display: block;
+      color: var(--gold-light);
+      font-size: .88rem;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background: #111;
+      border: 1px solid #514a3c;
+      border-radius: 5px;
+      color: white;
+      padding: 12px;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--gold);
+    }
+
+    textarea { min-height: 110px; resize: vertical; }
+
+    .full { grid-column: 1 / -1; }
+
+    .notice {
+      color: var(--muted);
+      font-size: .82rem;
+      margin-top: 12px;
+    }
+
+    .region-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .region-tools input { max-width: 360px; }
+
+    .region-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .region-item {
+      background: var(--panel);
+      border: 1px solid #39352c;
+      border-radius: 7px;
+      padding: 14px;
+    }
+
+    .region-item strong {
+      display: block;
+      color: var(--gold-light);
+    }
+
+    .region-item small { color: var(--muted); }
+
+    .region-count {
+      color: var(--gold);
+      margin-top: 12px;
+      font-size: .9rem;
+    }
+
+    .content-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .content-board ul {
+      padding-left: 19px;
+      color: var(--muted);
+    }
+
+    .content-board li { margin: 8px 0; }
+
+    .contact-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      background: #201b10;
+      border: 1px solid #594824;
+      border-radius: 10px;
+      padding: 25px;
+    }
+
+    footer {
+      padding: 28px 0;
+      background: #090909;
+      border-top: 1px solid #30291c;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .status-message {
+      display: none;
+      margin-top: 15px;
+      color: #8fe0ad;
+      padding: 12px;
+      border: 1px solid #28734b;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 800px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        background: #101010;
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        border-bottom: 1px solid var(--gold);
+      }
+
+      .nav-links.open { display: flex; }
+      .menu-button { display: block; }
+      .grid, .region-list { grid-template-columns: repeat(2, 1fr); }
+      .about-layout, .booking-layout, .content-board { grid-template-columns: 1fr; }
+      .hero { min-height: 560px; }
+    }
+
+    @media (max-width: 520px) {
+      .grid, .region-list, .form-grid { grid-template-columns: 1fr; }
+      .hero { min-height: 570px; }
+      section { padding: 58px 0; }
+      .contact-strip { align-items: flex-start; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+    <a class="brand" href="#home">SENGA<small>COMEDY • MUSIC • ENTERTAINMENT</small></a>
+
+    <button class="menu-button" id="menuButton" aria-label="Open navigation">MENU</button>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#shows">Shows</a>
+      <a href="#music">Music</a>
+      <a href="#regions">Tanzania Tour</a>
+      <a href="#booking">Bookings</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero" id="home">
+    <div class="container">
+      <div class="hero-content">
+        <div class="eyebrow">The entertainer • Tanzania</div>
+        <h1>SENGA<br><span>LIVE.</span></h1>
+        <div class="hero-tag">Daktari wa Kutibu Stress</div>
+        <p>
+          Comedy, music and live entertainment. Bringing people together
+          through laughter, performance and song.
+        </p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#booking">Book a Performance</a>
+          <a class="btn btn-outline" href="#shows">Explore the Platform</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container about-layout">
+      <div>
+        <div class="eyebrow">The personality</div>
+        <h2>More than <span>comedy.</span></h2>
+        <p class="muted">
+          Senga is presented here as a comedian, entertainer and singer.
+          This platform brings his comedy identity and music activities
+          together in one digital destination.
+        </p>
+      </div>
+
+      <div class="about-panel">
+        <h3>Entertainment with a distinctive identity</h3>
+        <p>
+          From comedy performances and audience interaction to music and
+          Gospel expression, the platform is designed to support Senga's
+          different creative activities.
+        </p>
+        <p>
+          The objective is to make it easier for audiences, event organisers
+          and promoters to discover his work and request performances.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="shows">
+    <div class="container">
+      <div class="section-heading">
+        <div class="eyebrow">Performance portfolio</div>
+        <h2>Comedy that <span>connects.</span></h2>
+        <p>Explore the main performance categories represented on this platform.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="card-icon">01</div>
+          <h3>Stand-up Comedy</h3>
+          <p>Live comedy, storytelling, humour and audience engagement.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">02</div>
+          <h3>Live Entertainment</h3>
+          <p>Entertainment for public events, private functions and organised shows.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">03</div>
+          <h3>Digital Comedy</h3>
+          <p>Comedy content and creative material for digital audiences and social platforms.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="quote-band">
+    <div class="container">
+      <div class="eyebrow">Senga's entertainment identity</div>
+      <h2>Daktari wa Kutibu Stress</h2>
+      <p>Comedy • Creativity • Connection</p>
+    </div>
+  </div>
+
+  <section id="music">
+    <div class="container">
+      <div class="section-heading">
+        <div class="eyebrow">Music portfolio</div>
+        <h2>A voice beyond <span>comedy.</span></h2>
+        <p>
+          The platform also recognises Senga's work as a singer, including
+          Gospel music and other musical performances.
+        </p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="card-icon">♪</div>
+          <h3>Gospel Music</h3>
+          <p>A dedicated space for Gospel songs, performances and faith-inspired musical work.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">♫</div>
+          <h3>Music Releases</h3>
+          <p>A place to feature released songs, music videos and official listening links.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">LIVE</div>
+          <h3>Live Singing</h3>
+          <p>Music performances for events, church programmes and suitable public occasions.</p>
+        </article>
+      </div>
+      <p class="notice">
+        Official song titles, streaming links and video links can be added
+        when the approved links are supplied.
+      </p>
+    </div>
+  </section>
+
+  <section id="regions">
+    <div class="container">
+      <div class="section-heading">
+        <div class="eyebrow">National coverage</div>
+        <h2>Taking Senga <span>across Tanzania.</span></h2>
+        <p>
+          Select a region to identify its administrative centre and use it
+          as a starting point for performance planning.
+        </p>
+      </div>
+
+      <div class="region-tools">
+        <input type="search" id="regionSearch" placeholder="Search a region or town...">
+        <select id="regionSelect" aria-label="Select a region">
+          <option value="">Select a region</option>
+        </select>
+      </div>
+
+      <div class="region-list" id="regionList"></div>
+      <div class="region-count" id="regionCount">31 regions listed.</div>
+      <p class="notice">
+        Administrative centres are provided for planning. Road distances,
+        ferry connections, travel times and transport costs must be confirmed
+        for each specific event before a quotation is issued.
+      </p>
+    </div>
+  </section>
+
+  <section id="booking">
+    <div class="container">
+      <div class="section-heading">
+        <div class="eyebrow">Performance enquiries</div>
+        <h2>Book <span>Senga.</span></h2>
+        <p>
+          Submit the event details for a performance enquiry. Include the
+          location, date and type of event so that the request can be assessed.
+        </p>
+      </div>
+
+      <div class="booking-layout">
+        <div>
+          <article class="card">
+            <h3>Booking information</h3>
+            <p>
+              Requests may relate to comedy shows, music performances,
+              Gospel programmes, corporate functions, private events or
+              other organised entertainment activities.
+            </p>
+          </article>
+          <br>
+          <article class="card">
+            <h3>Tour planning</h3>
+            <p>
+              Regional bookings can be assessed according to event location,
+              performance date, travel requirements, accommodation and
+              production arrangements.
+            </p>
+          </article>
+        </div>
+
+        <form id="bookingForm">
+          <div class="form-grid">
+            <div class="field">
+              <label for="clientName">Your name *</label>
+              <input id="clientName" name="clientName" required>
+            </div>
+
+            <div class="field">
+              <label for="clientPhone">Phone number *</label>
+              <input id="clientPhone" name="clientPhone" type="tel" required>
+            </div>
+
+            <div class="field">
+              <label for="eventType">Performance type *</label>
+              <select id="eventType" name="eventType" required>
+                <option value="">Select type</option>
+                <option>Comedy show</option>
+                <option>Gospel music</option>
+                <option>Other music performance</option>
+                <option>Corporate event</option>
+                <option>Private function</option>
+                <option>Festival or public event</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="eventRegion">Region *</label>
+              <select id="eventRegion" name="eventRegion" required>
+                <option value="">Select region</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="eventTown">Town / venue location *</label>
+              <input id="eventTown" name="eventTown" required>
+            </div>
+
+            <div class="field">
+              <label for="eventDate">Proposed date *</label>
+              <input id="eventDate" name="eventDate" type="date" required>
+            </div>
+
+            <div class="field full">
+              <label for="eventDetails">Event details</label>
+              <textarea id="eventDetails" name="eventDetails" placeholder="Describe the event, expected audience and any special requirements."></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Save Booking Enquiry</button>
+          <div class="status-message" id="bookingStatus" role="status"></div>
+          <p class="notice">
+            This demonstration version saves enquiries in this browser only.
+            It does not transmit them to a booking office or confirm a booking.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="content">
+    <div class="container">
+      <div class="section-heading">
+        <div class="eyebrow">Digital presence</div>
+        <h2>Content & <span>media.</span></h2>
+        <p>A structured space for planning and presenting Senga's creative output.</p>
+      </div>
+
+      <div class="content-board">
+        <article class="card">
+          <h3>Comedy content</h3>
+          <ul>
+            <li>Short comedy videos</li>
+            <li>Stage performance highlights</li>
+            <li>Behind-the-scenes material</li>
+            <li>Audience interaction and interviews</li>
+            <li>Promotional announcements</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Music content</h3>
+          <ul>
+            <li>Gospel music releases</li>
+            <li>Official music videos</li>
+            <li>Live singing sessions</li>
+            <li>Music promotion and announcements</li>
+            <li>Collaborations and special appearances</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="contact-strip">
+        <div>
+          <div class="eyebrow">Enquiries and collaborations</div>
+          <h2>Connect with <span>Senga.</span></h2>
+          <p class="muted">For bookings, promotions, media and partnership enquiries.</p>
+        </div>
+        <a href="#booking" class="btn btn-primary">Make an Enquiry</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <span>© <span id="year"></span> Senga Comedy & Music Platform</span>
+    <span>Comedy • Music • Gospel • Live Entertainment</span>
+  </div>
+</footer>
+
+<script>
+  const regions = [
+    { name: "Arusha", centre: "Arusha" },
+    { name: "Dar es Salaam", centre: "Dar es Salaam" },
+    { name: "Dodoma", centre: "Dodoma" },
+    { name: "Geita", centre: "Geita" },
+    { name: "Iringa", centre: "Iringa" },
+    { name: "Kagera", centre: "Bukoba" },
+    { name: "Katavi", centre: "Mpanda" },
+    { name: "Kigoma", centre: "Kigoma" },
+    { name: "Kilimanjaro", centre: "Moshi" },
+    { name: "Lindi", centre: "Lindi" },
+    { name: "Manyara", centre: "Babati" },
+    { name: "Mara", centre: "Musoma" },
+    { name: "Mbeya", centre: "Mbeya" },
+    { name: "Morogoro", centre: "Morogoro" },
+    { name: "Mtwara", centre: "Mtwara" },
+    { name: "Mwanza", centre: "Mwanza" },
+    { name: "Njombe", centre: "Njombe" },
+    { name: "Pwani", centre: "Kibaha" },
+    { name: "Rukwa", centre: "Sumbawanga" },
+    { name: "Ruvuma", centre: "Songea" },
+    { name: "Shinyanga", centre: "Shinyanga" },
+    { name: "Simiyu", centre: "Bariadi" },
+    { name: "Singida", centre: "Singida" },
+    { name: "Songwe", centre: "Vwawa" },
+    { name: "Tabora", centre: "Tabora" },
+    { name: "Tanga", centre: "Tanga" },
+    { name: "Kaskazini Pemba", centre: "Wete" },
+    { name: "Kusini Pemba", centre: "Mkoani" },
+    { name: "Kaskazini Unguja", centre: "Mkokotoni" },
+    { name: "Kusini Unguja", centre: "Koani" },
+    { name: "Mjini Magharibi", centre: "Zanzibar City" }
+  ];
+
+  const regionList = document.getElementById("regionList");
+  const regionSearch = document.getElementById("regionSearch");
+  const regionSelect = document.getElementById("regionSelect");
+  const eventRegion = document.getElementById("eventRegion");
+
+  function populateRegionOptions() {
+    regions.forEach(region => {
+      const option1 = document.createElement("option");
+      option1.value = region.name;
+      option1.textContent = region.name;
+      regionSelect.appendChild(option1);
+
+      const option2 = document.createElement("option");
+      option2.value = region.name;
+      option2.textContent = region.name;
+      eventRegion.appendChild(option2);
+    });
+  }
+
+  function renderRegions(filter = "") {
+    const term = filter.trim().toLowerCase();
+    const matches = regions.filter(region =>
+      region.name.toLowerCase().includes(term) ||
+      region.centre.toLowerCase().includes(term)
+    );
+
+    regionList.innerHTML = "";
+
+    matches.forEach(region => {
+      const item = document.createElement("article");
+      item.className = "region-item";
+
+      const name = document.createElement("strong");
+      name.textContent = region.name;
+
+      const town = document.createElement("small");
+      town.textContent = "Administrative centre: " + region.centre;
+
+      item.appendChild(name);
+      item.appendChild(town);
+      regionList.appendChild(item);
+    });
+
+    document.getElementById("regionCount").textContent =
+      matches.length + " of " + regions.length + " regions displayed.";
+  }
+
+  populateRegionOptions();
+  renderRegions();
+
+  regionSearch.addEventListener("input", event => {
+    renderRegions(event.target.value);
+  });
+
+  regionSelect.addEventListener("change", event => {
+    if (event.target.value) {
+      regionSearch.value = event.target.value;
+      renderRegions(event.target.value);
+    } else {
+      regionSearch.value = "";
+      renderRegions();
+    }
+  });
+
+  document.getElementById("menuButton").addEventListener("click", () => {
+    document.getElementById("navLinks").classList.toggle("open");
+  });
+
+  document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+      document.getElementById("navLinks").classList.remove("open");
+    });
+  });
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  document.getElementById("bookingForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const form = event.target;
+    const booking = {
+      name: form.clientName.value.trim(),
+      phone: form.clientPhone.value.trim(),
+      type: form.eventType.value,
+      region: form.eventRegion.value,
+      town: form.eventTown.value.trim(),
+      date: form.eventDate.value,
+      details: form.eventDetails.value.trim(),
+      submittedAt: new Date().toISOString()
+    };
+
+    try {
+      const saved = JSON.parse(localStorage.getItem("sengaBookingEnquiries") || "[]");
+      saved.push(booking);
+      localStorage.setItem("sengaBookingEnquiries", JSON.stringify(saved));
+
+      const status = document.getElementById("bookingStatus");
+      status.style.display = "block";
+      status.textContent =
+        "Enquiry saved on this device. This is not a confirmed booking. " +
+        "Please retain your details and contact the booking office through its verified contact channel.";
+
+      form.reset();
+    } catch (error) {
+      const status = document.getElementById("bookingStatus");
+      status.style.display = "block";
+      status.textContent =
+        "The browser could not save this enquiry. Please try again or record the details separately.";
+    }
+  });
+</script>
+
+</body>
+</html>
