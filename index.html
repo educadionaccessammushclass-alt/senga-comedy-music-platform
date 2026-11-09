@@ -951,5 +951,282 @@
     </div>
 </footer>
 <!-- END OFFICIAL DEVELOPER ATTRIBUTION FOOTER -->
+  <!-- ==========================================
+     SENGA LEGAL360 — CONTRACT ADMINISTRATION
+     Developed by AAMush Technologies Tanzania Ltd.
+=========================================== -->
+
+<section id="legal360" class="legal360-module">
+
+<style>
+.legal360-module {
+  background:#101010;
+  color:#f5f5f5;
+  padding:25px 15px;
+  font-family:Arial,sans-serif;
+}
+.legal360-container {
+  max-width:1100px;
+  margin:auto;
+}
+.legal360-header {
+  border-bottom:2px solid #e5b53c;
+  padding-bottom:15px;
+  margin-bottom:25px;
+}
+.legal360-header h2 {
+  color:#e5b53c;
+  letter-spacing:2px;
+}
+.legal360-card {
+  background:#1b1b1b;
+  border:1px solid #383838;
+  border-radius:10px;
+  padding:20px;
+  margin-bottom:20px;
+}
+.legal360-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+}
+.legal360-module label {
+  display:block;
+  margin-bottom:6px;
+  color:#e5b53c;
+  font-size:13px;
+}
+.legal360-module input,
+.legal360-module select,
+.legal360-module textarea {
+  width:100%;
+  padding:11px;
+  background:#101010;
+  color:white;
+  border:1px solid #555;
+  border-radius:6px;
+  margin-bottom:13px;
+}
+.legal360-module textarea {
+  min-height:90px;
+}
+.legal360-btn {
+  background:#e5b53c;
+  color:#111;
+  border:0;
+  border-radius:6px;
+  padding:11px 17px;
+  font-weight:bold;
+  margin:5px;
+  cursor:pointer;
+}
+.legal360-btn.secondary {
+  background:#333;
+  color:white;
+  border:1px solid #777;
+}
+.legal360-table {
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
+.legal360-table th,
+.legal360-table td {
+  padding:11px;
+  border-bottom:1px solid #444;
+  text-align:left;
+  font-size:12px;
+}
+.legal360-table th {
+  color:#e5b53c;
+}
+.legal360-table-wrap {
+  overflow-x:auto;
+}
+.legal360-badge {
+  color:#e5b53c;
+  font-weight:bold;
+}
+.legal360-notice {
+  color:#bbb;
+  font-size:12px;
+  line-height:1.6;
+}
+@media(max-width:650px) {
+  .legal360-grid {
+    grid-template-columns:1fr;
+  }
+}
+</style>
+
+<div class="legal360-container">
+
+<header class="legal360-header">
+  <div class="legal360-badge">
+    SENGA DIGITAL BRAND COMMAND CENTRE
+  </div>
+  <h2>LEGAL360</h2>
+  <p>Performance Contract & Agreement Administration</p>
+  <small>AAMush Technologies Tanzania Ltd.</small>
+</header>
+
+<div class="legal360-card">
+  <h3>01. Create Performance Agreement</h3>
+
+  <form id="legal360Form">
+
+    <div class="legal360-grid">
+
+      <div>
+        <label>Agreement Reference</label>
+        <input id="l360Reference" readonly>
+      </div>
+
+      <div>
+        <label>Booking Reference</label>
+        <input id="l360Booking" placeholder="Booking reference">
+      </div>
+
+      <div>
+        <label>Client / Organisation</label>
+        <input id="l360Client" required>
+      </div>
+
+      <div>
+        <label>Client Telephone</label>
+        <input id="l360Phone">
+      </div>
+
+      <div>
+        <label>Client Email</label>
+        <input id="l360Email" type="email">
+      </div>
+
+      <div>
+        <label>Event Name</label>
+        <input id="l360Event" required>
+      </div>
+
+      <div>
+        <label>Event Location</label>
+        <input id="l360Location" required>
+      </div>
+
+      <div>
+        <label>Performance Date</label>
+        <input id="l360Date" type="date" required>
+      </div>
+
+      <div>
+        <label>Performance Duration</label>
+        <input id="l360Duration" placeholder="e.g. 60 minutes">
+      </div>
+
+      <div>
+        <label>Performance Fee (TZS)</label>
+        <input id="l360Fee" type="number" min="0" required>
+      </div>
+
+      <div>
+        <label>Deposit (TZS)</label>
+        <input id="l360Deposit" type="number" min="0">
+      </div>
+
+      <div>
+        <label>Balance Payment Deadline</label>
+        <input id="l360PaymentDate" type="date">
+      </div>
+
+    </div>
+
+    <h3>02. Contractual Conditions</h3>
+
+    <label>Performance Obligations</label>
+    <textarea id="l360Obligations"
+      placeholder="Describe Senga's performance obligations..."></textarea>
+
+    <label>Client Obligations</label>
+    <textarea id="l360ClientObligations"
+      placeholder="Venue, sound, security, accommodation, payments..."></textarea>
+
+    <label>Cancellation and Postponement</label>
+    <textarea id="l360Cancellation"
+      placeholder="Specify cancellation notice, postponement and refund arrangements..."></textarea>
+
+    <label>Recording, Broadcasting and Intellectual Property</label>
+    <textarea id="l360Rights"
+      placeholder="Specify recording, photography, broadcasting, distribution and publicity permissions..."></textarea>
+
+    <label>Force Majeure</label>
+    <textarea id="l360Force"
+      placeholder="Specify how unavoidable events affecting performance will be handled..."></textarea>
+
+    <label>Dispute Resolution and Governing Law</label>
+    <textarea id="l360Disputes"
+      placeholder="Specify applicable law and dispute resolution procedure..."></textarea>
+
+    <label>Additional Conditions</label>
+    <textarea id="l360Additional"></textarea>
+
+    <label>Agreement Status</label>
+    <select id="l360Status">
+      <option>Draft</option>
+      <option>Sent for Review</option>
+      <option>Awaiting Signature</option>
+      <option>Signed</option>
+      <option>Active</option>
+      <option>Completed</option>
+      <option>Cancelled</option>
+    </select>
+
+    <button type="submit" class="legal360-btn">
+      SAVE AGREEMENT
+    </button>
+
+    <button type="button" class="legal360-btn secondary"
+      onclick="legal360Reset()">
+      CLEAR FORM
+    </button>
+
+  </form>
+</div>
+
+<div class="legal360-card">
+  <h3>03. Agreement Register</h3>
+
+  <div class="legal360-table-wrap">
+    <table class="legal360-table">
+      <thead>
+        <tr>
+          <th>Reference</th>
+          <th>Client</th>
+          <th>Event</th>
+          <th>Date</th>
+          <th>Fee (TZS)</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="legal360Records"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="legal360-notice">
+  LEGAL360 is a contract-administration tool. Agreements should be
+  reviewed by a qualified legal professional before execution.
+  Electronic signatures, identity authentication and legal enforceability
+  are not provided by this standalone module.
+</div>
+
+<footer style="border-top:1px solid #444;padding-top:15px;margin-top:20px">
+  <small>
+    Developed by AAMush Technologies Tanzania Ltd.<br>
+    Strategic Architect: Dr. James K. Mushi, PhD.
+  </small>
+</footer>
+
+</div>
+</section>
 </body>
 </html>
