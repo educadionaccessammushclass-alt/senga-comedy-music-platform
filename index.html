@@ -1228,5 +1228,654 @@
 
 </div>
 </section>
+<script>
+(function () {
+  "use strict";
+
+  const STORAGE_KEY = "SENGA_LEGAL360_RECORDS";
+
+  const form = document.getElementById("legal360Form");
+  const recordsBody = document.getElementById("legal360Records");
+
+  if (!form || !recordsBody) {
+    console.error("LEGAL360: Required HTML elements were not found.");
+    return;
+  }
+
+  let editingId = null;
+  let records = [];
+
+  // 1. STORAGE MANAGEMENT
+
+  function loadRecords() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      records = saved ? JSON.parse(saved) : [];
+
+      if (!Array.isArray(records)) {
+        records = [];
+      }
+    } catch (error) {
+      console.error("LEGAL360 storage error:", error);
+      records = [];
+      alert("LEGAL360 could not read its saved records.");
+    }
+  }
+
+  function saveRecords() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+      return true;
+    } catch (error) {
+      console.error("LEGAL360 save error:", error);
+      alert("Unable to save the agreement. Check browser storage.");
+      return false;
+    }
+  }
+
+  // 2. AGREEMENT REFERENCE GENERATOR
+
+  function generateReference() {
+    const date = new Date();
+
+    const datePart =
+      date.getFullYear().toString() +
+      String(date.getMonth() + 1).padStart(2, "0") +
+      String(date.getDate()).padStart(2, "0");
+
+    let reference;
+
+    do {
+      const randomPart = Math.floor(
+        1000 + Math.random() * 9000
+      );
+
+      reference = "SENGA-L360-" + datePart + "-" + randomPart;
+
+    } while (records.some(record =>
+      record.reference === reference
+    ));
+
+    return reference;
+  }
+
+  // 3. FORM FIELD MANAGEMENT
+
+  const fieldIds = [
+    "l360Reference",
+    "l360Booking",
+    "l360Client",
+    "l360Phone",
+    "l360Email",
+    "l360Event",
+    "l360Location",
+    "l360Date",
+    "l360Duration",
+    "l360Fee",
+    "l360Deposit",
+    "l360PaymentDate",
+    "l360Obligations",
+    "l360ClientObligations",
+    "l360Cancellation",
+    "l360Rights",
+    "l360Force",
+    "l360Disputes",
+    "l360Additional",
+    "l360Status"
+  ];
+
+  function getField(id) {
+    return document.getElementById(id);
+  }
+
+  function getFormData() {
+    const data = {};
+
+    fieldIds.forEach(id => {
+      const element = getField(id);
+
+      if (element) {
+        data[id] = element.value.trim();
+      }
+    });
+
+    return data;
+  }
+
+  function populateForm(record) {
+    fieldIds.forEach(id => {
+      const element = getField(id);
+
+      if (element) {
+        element.value = record[id] || "";
+      }
+    });
+  }
+
+  // 4. CURRENCY FORMATTING
+
+  function formatCurrency(value) {
+    return Number(value || 0).toLocaleString("en-TZ", {
+      maximumFractionDigits: 0
+    });
+  }
+
+  // 5. HTML ESCAPING
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => {
+      const entities = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      };
+
+      return entities[char];
+    });
+  }
+
+  // 6. AGREEMENT REGISTER DISPLAY
+
+  function renderRecords() {
+    recordsBody.innerHTML = "";
+
+    const sortedRecords = [...records].sort((a, b) => {
+      return new Date(b.updatedAt || b.createdAt) -
+             new Date(a.updatedAt || a.createdAt);
+    });
+
+    if (sortedRecords.length === 0) {
+      recordsBody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align:center;color:#aaa;padding:25px">
+            No agreements registered yet.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    sortedRecords.forEach(record => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${escapeHTML(record.l360Reference)}</td>
+
+        <td>${escapeHTML(record.l360Client)}</td>
+
+        <td>${escapeHTML(record.l360Event)}</td>
+
+        <td>${escapeHTML(record.l360Date)}</td>
+
+        <td>${formatCurrency(record.l360Fee)}</td>
+
+        <td>
+          <span class="legal360-badge">
+            ${escapeHTML(record.l360Status)}
+          </span>
+        </td>
+
+        <td>
+          <button
+            type="button"
+            class="legal360-btn secondary"
+            data-action="edit"
+            data-id="${escapeHTML(record.id)}">
+            EDIT
+          </button>
+
+          <button
+            type="button"
+            class="legal360-btn secondary"
+            data-action="print"
+            data-id="${escapeHTML(record.id)}">
+            PRINT
+          </button>
+
+          <button
+            type="button"
+            class="legal360-btn secondary"
+            data-action="delete"
+            data-id="${escapeHTML(record.id)}">
+            DELETE
+          </button>
+        </td>
+      `;
+
+      recordsBody.appendChild(row);
+    });
+  }
+
+  // 7. FORM RESET
+
+  function resetForm() {
+    form.reset();
+
+    editingId = null;
+
+    const reference = getField("l360Reference");
+
+    if (reference) {
+      reference.value = generateReference();
+    }
+
+    const submitButton = form.querySelector(
+      'button[type="submit"]'
+    );
+
+    if (submitButton) {
+      submitButton.textContent = "SAVE AGREEMENT";
+    }
+  }
+
+  window.legal360Reset = resetForm;
+
+  // 8. SAVE AND UPDATE AGREEMENTS
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    if (!form.reportValidity()) {
+      return;
+    }
+
+    const data = getFormData();
+
+    const fee = Number(data.l360Fee || 0);
+    const deposit = Number(data.l360Deposit || 0);
+
+    if (!Number.isFinite(fee) ||
+        !Number.isFinite(deposit) ||
+        fee < 0 ||
+        deposit < 0) {
+      alert("Please enter valid non-negative payment amounts.");
+      return;
+    }
+
+    const now = new Date().toISOString();
+
+    if (editingId) {
+      const index = records.findIndex(
+        record => record.id === editingId
+      );
+
+      if (index === -1) {
+        alert("The agreement could not be found.");
+        resetForm();
+        return;
+      }
+
+      const updatedRecord = {
+        ...records[index],
+        ...data,
+        id: editingId,
+        updatedAt: now
+      };
+
+      records[index] = updatedRecord;
+
+    } else {
+      const newRecord = {
+        ...data,
+        id: "L360-" + Date.now() + "-" +
+            Math.floor(Math.random() * 10000),
+        createdAt: now,
+        updatedAt: now
+      };
+
+      records.push(newRecord);
+    }
+
+    if (!saveRecords()) {
+      return;
+    }
+
+    renderRecords();
+    resetForm();
+
+    alert(
+      editingId
+        ? "Agreement updated successfully."
+        : "Agreement saved successfully."
+    );
+  });
+
+  // 9. EDIT AGREEMENT
+
+  function editAgreement(id) {
+    const record = records.find(item => item.id === id);
+
+    if (!record) {
+      alert("Agreement not found.");
+      return;
+    }
+
+    editingId = id;
+
+    populateForm(record);
+
+    const submitButton = form.querySelector(
+      'button[type="submit"]'
+    );
+
+    if (submitButton) {
+      submitButton.textContent = "UPDATE AGREEMENT";
+    }
+
+    form.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+
+  // 10. DELETE AGREEMENT
+
+  function deleteAgreement(id) {
+    const record = records.find(item => item.id === id);
+
+    if (!record) {
+      alert("Agreement not found.");
+      return;
+    }
+
+    const confirmed = confirm(
+      "Are you sure you want to delete agreement " +
+      record.l360Reference +
+      "?\n\nThis action cannot be undone."
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    const previousRecords = [...records];
+
+    records = records.filter(item => item.id !== id);
+
+    if (!saveRecords()) {
+      records = previousRecords;
+      return;
+    }
+
+    if (editingId === id) {
+      resetForm();
+    }
+
+    renderRecords();
+
+    alert("Agreement deleted successfully.");
+  }
+
+  // 11. PRINT INDIVIDUAL AGREEMENT
+
+  function printAgreement(id) {
+    const record = records.find(item => item.id === id);
+
+    if (!record) {
+      alert("Agreement not found.");
+      return;
+    }
+
+    const fee = Number(record.l360Fee || 0);
+    const deposit = Number(record.l360Deposit || 0);
+    const balance = fee - deposit;
+
+    const printWindow = window.open(
+      "",
+      "_blank",
+      "width=900,height=750"
+    );
+
+    if (!printWindow) {
+      alert("Printing window blocked. Allow pop-ups and try again.");
+      return;
+    }
+
+    const sections = [
+      ["Performance Obligations", record.l360Obligations],
+      ["Client Obligations", record.l360ClientObligations],
+      ["Cancellation and Postponement", record.l360Cancellation],
+      ["Recording, Broadcasting and Intellectual Property", record.l360Rights],
+      ["Force Majeure", record.l360Force],
+      ["Dispute Resolution and Governing Law", record.l360Disputes],
+      ["Additional Conditions", record.l360Additional]
+    ];
+
+    const sectionHTML = sections.map(section => `
+      <h3>${escapeHTML(section[0])}</h3>
+      <p>${escapeHTML(section[1] || "Not specified.")
+        .replace(/\n/g, "<br>")}</p>
+    `).join("");
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <title>LEGAL360 Agreement</title>
+
+        <style>
+          body {
+            font-family:Arial,sans-serif;
+            color:#222;
+            padding:35px;
+            line-height:1.6;
+          }
+
+          h1 {
+            color:#9b741b;
+            text-align:center;
+          }
+
+          h2 {
+            border-bottom:2px solid #c49b32;
+            padding-bottom:10px;
+          }
+
+          h3 {
+            margin-top:22px;
+            color:#333;
+          }
+
+          table {
+            width:100%;
+            border-collapse:collapse;
+            margin:20px 0;
+          }
+
+          td {
+            border:1px solid #ccc;
+            padding:9px;
+          }
+
+          .signatures {
+            display:flex;
+            justify-content:space-between;
+            gap:40px;
+            margin-top:70px;
+          }
+
+          .signature {
+            width:45%;
+            border-top:1px solid #222;
+            padding-top:10px;
+          }
+
+          @media print {
+            body { padding:15px; }
+          }
+        </style>
+      </head>
+
+      <body>
+
+        <h1>SENGA DIGITAL BRAND COMMAND CENTRE</h1>
+
+        <h2>PERFORMANCE AGREEMENT</h2>
+
+        <p><strong>Agreement Reference:</strong>
+          ${escapeHTML(record.l360Reference)}</p>
+
+        <p><strong>Booking Reference:</strong>
+          ${escapeHTML(record.l360Booking)}</p>
+
+        <table>
+          <tr>
+            <td><strong>Client / Organisation</strong></td>
+            <td>${escapeHTML(record.l360Client)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Telephone</strong></td>
+            <td>${escapeHTML(record.l360Phone)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Email</strong></td>
+            <td>${escapeHTML(record.l360Email)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Event</strong></td>
+            <td>${escapeHTML(record.l360Event)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Location</strong></td>
+            <td>${escapeHTML(record.l360Location)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Performance Date</strong></td>
+            <td>${escapeHTML(record.l360Date)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Duration</strong></td>
+            <td>${escapeHTML(record.l360Duration)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Performance Fee</strong></td>
+            <td>TZS ${formatCurrency(fee)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Deposit</strong></td>
+            <td>TZS ${formatCurrency(deposit)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Outstanding Balance</strong></td>
+            <td>TZS ${formatCurrency(balance)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Payment Deadline</strong></td>
+            <td>${escapeHTML(record.l360PaymentDate)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Agreement Status</strong></td>
+            <td>${escapeHTML(record.l360Status)}</td>
+          </tr>
+        </table>
+
+        ${sectionHTML}
+
+        <h3>Agreement Acceptance</h3>
+
+        <p>
+          The parties confirm that they have reviewed the
+          terms and conditions recorded in this agreement.
+          Any amendment should be documented and accepted
+          by the relevant parties.
+        </p>
+
+        <div class="signatures">
+          <div class="signature">
+            <strong>FOR THE CLIENT</strong>
+            <p>Name:</p>
+            <p>Signature:</p>
+            <p>Date:</p>
+          </div>
+
+          <div class="signature">
+            <strong>FOR SENGA</strong>
+            <p>Name:</p>
+            <p>Signature:</p>
+            <p>Date:</p>
+          </div>
+        </div>
+
+        <hr>
+
+        <p>
+          <strong>Administrative Platform:</strong>
+          LEGAL360
+        </p>
+
+        <p>
+          Developed by AAMush Technologies Tanzania Ltd.
+          <br>
+          Strategic Architect: Dr. James K. Mushi, PhD.
+        </p>
+
+        <p>
+          This document is an administrative agreement
+          template and should be reviewed by a qualified
+          legal professional before execution.
+        </p>
+
+        <script>
+          window.onload = function() {
+            window.print();
+          };
+        <\/script>
+
+      </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+  }
+
+  // 12. AGREEMENT REGISTER ACTIONS
+
+  recordsBody.addEventListener("click", function (event) {
+    const button = event.target.closest("button[data-action]");
+
+    if (!button) {
+      return;
+    }
+
+    const action = button.dataset.action;
+    const id = button.dataset.id;
+
+    if (action === "edit") {
+      editAgreement(id);
+    }
+
+    if (action === "delete") {
+      deleteAgreement(id);
+    }
+
+    if (action === "print") {
+      printAgreement(id);
+    }
+  });
+
+  // 13. INITIALISE LEGAL360
+
+  loadRecords();
+  renderRecords();
+  resetForm();
+
+  console.log("LEGAL360 initialised successfully.");
+
+})();
+</script>  
 </body>
 </html>
